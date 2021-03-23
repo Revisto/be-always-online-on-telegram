@@ -8,6 +8,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+
+
+import random
+
 from validator_collection import *
 from time import sleep
 
@@ -22,10 +26,9 @@ class SeleniumTelegram:
 
     def setup_selenium_drive_with_android_useragent(self):
         options = Options()
-        options.add_argument("--headless")  
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-        options.add_argument("user-agent=Mozilla/5.0 (Linux; Android 6.0; HTC One M9 Build/MRA58K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36")
+        #options.add_argument("--headless")  
+        #options.add_argument('--no-sandbox')
+        #options.add_argument('--disable-dev-shm-usage')
         self.driver = webdriver.Chrome(executable_path=self.chrome_webdriver_path, chrome_options=options)
         self.driver.set_window_size(1920, 1080)
 
@@ -59,7 +62,15 @@ class SeleniumTelegram:
             sleep(5)
 
     def pretend_to_be_online(self):
+        self.driver.find_element_by_xpath("//li[@class='im_dialog_wrap']").click()
         while True:
-            sleep(2)
-            self.driver.find_element_by_xpath("//li[@class='im_dialog_wrap']").click()
-            sleep(5)
+            sleep(1)
+            textarea_element = self.driver.find_element_by_class_name("composer_rich_textarea")
+            textarea_element.send_keys(f"I'm online ---- ‌{General().random_string_generator()}")
+            textarea_element.send_keys(Keys.RETURN)
+
+import string
+class General:
+    def random_string_generator(self, size=50):
+        letters = string.ascii_letters
+        return ( ''.join(random.choice(letters) for i in range(size)) )

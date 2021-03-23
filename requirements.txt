@@ -1,0 +1,3 @@
+python-dotenv
+selenium
+validator_collection

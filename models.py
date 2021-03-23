@@ -7,18 +7,17 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
-
-
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+import threading
 import random
-
 from validator_collection import *
 from time import sleep
+
+load_dotenv()
 
 class SeleniumTelegram:
 
     def __init__(self):
-        load_dotenv()
         self.telegram_web_url = "https://web.telegram.org/"
         self.chrome_webdriver_path = getenv("chrome_webdriver_path")
         self.telegram_telephone_code = getenv("telegram_telephone_code")
@@ -48,14 +47,14 @@ class SeleniumTelegram:
         sleep(3)
         self.driver.find_element_by_class_name("btn-md-primary").click()
 
-        login_code = input("enter your login code : ")
+        login_code = TelegramBotInformation().get_user_verification_input("verification")
         self.driver.find_elements_by_class_name("ng-invalid-required")[-1].send_keys(login_code)
         sleep(3)
         self.driver.find_element_by_class_name("login_head_submit_wrap").click()
         sleep(5)
         secound_password_elements = self.driver.find_elements_by_class_name("ng-invalid-required")
         if len(secound_password_elements) == 2:
-            secound_password_user_answer = input("enter your secound password : ")
+            secound_password_user_answer = TelegramBotInformation().get_user_verification_input("secound password")
             secound_password_elements[-1].send_keys(secound_password_user_answer)
             sleep(3)
             self.driver.find_element_by_class_name("login_head_submit_wrap").click()
@@ -74,3 +73,27 @@ class General:
     def random_string_generator(self, size=50):
         letters = string.ascii_letters
         return ( ''.join(random.choice(letters) for i in range(size)) )
+
+
+class TelegramBotInformation:
+    def __init__(self):
+        self.chat_id = getenv("chat_id")
+        self.bot_access_token = getenv("bot_access_token")
+
+    def get_user_verification_input(self, message):
+        def shutdown():
+            updater.stop()
+            updater.is_idle = False
+        def get_input(update, context):
+            update.message.reply_text("Done, thanks")
+            threading.Thread(target=shutdown).start()
+            global user_text_input
+            user_text_input = update.message.text
+            
+        updater = Updater(self.bot_access_token, use_context=True)
+        dp = updater.dispatcher
+        dp.add_handler(MessageHandler(Filters.text,get_input))
+        updater.bot.send_message(chat_id=self.chat_id, text=f"Send me your {message} code")
+        updater.start_polling()
+        updater.idle()
+        return user_text_input

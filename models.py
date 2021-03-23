@@ -27,6 +27,7 @@ class SeleniumTelegram:
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument("user-agent=Mozilla/5.0 (Linux; Android 6.0; HTC One M9 Build/MRA58K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36")
         self.driver = webdriver.Chrome(executable_path=self.chrome_webdriver_path, chrome_options=options)
+        self.driver.set_window_size(1920, 1080)
 
     def go_to_telegram_web_url(self):
         self.driver.get(self.telegram_web_url)
@@ -59,5 +60,6 @@ class SeleniumTelegram:
 
     def pretend_to_be_online(self):
         while True:
+            sleep(2)
             self.driver.find_element_by_xpath("//li[@class='im_dialog_wrap']").click()
             sleep(5)

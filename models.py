@@ -22,9 +22,9 @@ class SeleniumTelegram:
 
     def setup_selenium_drive_with_android_useragent(self):
         options = Options()
-        #options.add_argument("--headless")  
-        #options.add_argument('--no-sandbox')
-        #options.add_argument('--disable-dev-shm-usage')
+        options.add_argument("--headless")  
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
         options.add_argument("user-agent=Mozilla/5.0 (Linux; Android 6.0; HTC One M9 Build/MRA58K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36")
         self.driver = webdriver.Chrome(executable_path=self.chrome_webdriver_path, chrome_options=options)
 

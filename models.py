@@ -44,14 +44,14 @@ class SeleniumTelegram:
         sleep(2)
         self.driver.find_element_by_class_name("btn-md-primary").click()
 
-        login_code = input("enter your login code :")
+        login_code = input("enter your login code : ")
         self.driver.find_elements_by_class_name("ng-invalid-required")[-1].send_keys(login_code)
         sleep(1)
         self.driver.find_element_by_class_name("login_head_submit_wrap").click()
         sleep(5)
         secound_password_elements = self.driver.find_elements_by_class_name("ng-invalid-required")
         if len(secound_password_elements) == 2:
-            secound_password_user_answer = input("enter your secound password:")
+            secound_password_user_answer = input("enter your secound password : ")
             secound_password_elements[-1].send_keys(secound_password_user_answer)
             sleep(1)
             self.driver.find_element_by_class_name("login_head_submit_wrap").click()

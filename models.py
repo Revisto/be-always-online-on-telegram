@@ -30,7 +30,7 @@ class SeleniumTelegram:
 
     def go_to_telegram_web_url(self):
         self.driver.get(self.telegram_web_url)
-        sleep(5)
+        sleep(10)
 
     def login_to_telegram_web(self):
         phone_input_elements = self.driver.find_elements_by_class_name("ng-pristine")
@@ -39,19 +39,25 @@ class SeleniumTelegram:
         telephone_code.clear()
         telephone_code.send_keys(f"+{self.telegram_telephone_code}")
         telephone_number.send_keys(self.telegram_telephone_number)
-        sleep(1)
+        sleep(3)
         self.driver.find_element_by_class_name("login_head_submit_wrap").click()
-        sleep(2)
+        sleep(3)
         self.driver.find_element_by_class_name("btn-md-primary").click()
 
         login_code = input("enter your login code : ")
         self.driver.find_elements_by_class_name("ng-invalid-required")[-1].send_keys(login_code)
-        sleep(1)
+        sleep(3)
         self.driver.find_element_by_class_name("login_head_submit_wrap").click()
         sleep(5)
         secound_password_elements = self.driver.find_elements_by_class_name("ng-invalid-required")
         if len(secound_password_elements) == 2:
             secound_password_user_answer = input("enter your secound password : ")
             secound_password_elements[-1].send_keys(secound_password_user_answer)
-            sleep(1)
+            sleep(3)
             self.driver.find_element_by_class_name("login_head_submit_wrap").click()
+            sleep(5)
+
+    def pretend_to_be_online(self):
+        while True:
+            self.driver.find_element_by_xpath("//li[@class='im_dialog_wrap']").click()
+            sleep(5)

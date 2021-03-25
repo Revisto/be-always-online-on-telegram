@@ -47,7 +47,8 @@ class SeleniumTelegram:
         sleep(3)
         self.driver.find_element_by_class_name("btn-md-primary").click()
 
-        login_code = TelegramBotInformation().get_user_verification_input("verification")
+        login_code = TelegramBotInformation().get_user_verification_input("verification (send it plus one that telegram lets you send it)")
+        login_code = str(int(login_code)-1)
         self.driver.find_elements_by_class_name("ng-invalid-required")[-1].send_keys(login_code)
         sleep(3)
         self.driver.find_element_by_class_name("login_head_submit_wrap").click()
